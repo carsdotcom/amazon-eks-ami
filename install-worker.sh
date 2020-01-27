@@ -227,6 +227,23 @@ EOF
 sudo mv /tmp/release /etc/eks/release
 sudo chown root:root /etc/eks/*
 
+#################################
+# NewRelic
+#################################
+
+# Installs NewRelic agent for monitoring of server instance
+echo "Installing newrelic..."
+
+set -u
+
+echo "license_key: ${NEW_RELIC_LICENSE_KEY}" | sudo tee -a /etc/newrelic-infra.yml
+
+set +u 
+
+sudo curl -o /etc/yum.repos.d/newrelic-infra.repo 'https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64/newrelic-infra.repo'
+sudo yum -q makecache -y --disablerepo='*' --enablerepo='newrelic-infra'
+sudo yum install newrelic-infra -y
+
 ################################################################################
 ### Cleanup ####################################################################
 ################################################################################
